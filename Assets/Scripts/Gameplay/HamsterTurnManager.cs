@@ -1,107 +1,140 @@
 using UnityEngine;
-using System.Collections;
+using System.Collections.Generic;
 
 public class HamsterTurnManager : MonoBehaviour
 {
-    [Header("Player References")]
-    public HamsterController player1;
-    public HamsterController player2;
+    public static HamsterTurnManager Instance;
 
-    [Header("Turn Settings")]
-    public float minVelocityToSwitch = 0.1f; // kecepatan dianggap berhenti
-    public float endTurnDelay = 1f;          // delay sebelum ganti turn
-    public bool isGameOver = false;
+    [Header("Players")]
+    public List<HamsterController> player1Hamsters;
+    public List<HamsterController> player2Hamsters;
 
+    [Header("Spawn Points")]
+    public Transform player1Spawn;
+    public Transform player2Spawn;
+
+    [Header("Game Settings")]
+    public int maxScore = 4;
+    public float endTurnDelay = 1f;
+    public float minVelocityToSwitch = 0.1f;
+
+    private int player1Score = 0;
+    private int player2Score = 0;
     private int currentPlayer = 1;
-    private bool isSwitchingTurn = false;
-    public static HamsterTurnManager Instance { get; private set; }
-    public int CurrentPlayer => currentPlayer;
+    private int currentHamsterIndex = 0;
+    private bool switchingTurn = false;
 
-    void Awake()
+    private void Awake()
     {
         Instance = this;
     }
 
     private void Start()
     {
-        ActivatePlayer(player1, true);
-        ActivatePlayer(player2, false);
+        // Pastikan semua hamster tahu playerID-nya
+        foreach (var h in player1Hamsters)
+            h.playerID = 1;
 
-        Debug.Log("🎮 Game dimulai! Giliran Player 1");
+        foreach (var h in player2Hamsters)
+            h.playerID = 2;
+
+        // Aktifkan giliran awal
+        ActivatePlayerHamsters(1, true);
+        ActivatePlayerHamsters(2, false);
     }
 
     private void Update()
     {
-        if (isGameOver || isSwitchingTurn) return;
+        if (switchingTurn) return;
 
-        CheckGameOver();
-
-        // Cek giliran Player 1
-        if (currentPlayer == 1 && player1 != null && player1.isLaunched)
+        HamsterController activeHamster = GetActiveHamster();
+        if (activeHamster != null && activeHamster.IsCompletelyStopped(minVelocityToSwitch))
         {
-            if (player1.IsCompletelyStopped(minVelocityToSwitch))
-            {
-                StartCoroutine(SwitchTurn(2));
-            }
-        }
-        // Cek giliran Player 2
-        else if (currentPlayer == 2 && player2 != null && player2.isLaunched)
-        {
-            if (player2.IsCompletelyStopped(minVelocityToSwitch))
-            {
-                StartCoroutine(SwitchTurn(1));
-            }
+            StartCoroutine(SwitchTurn(currentPlayer == 1 ? 2 : 1));
         }
     }
 
-    private IEnumerator SwitchTurn(int nextPlayer)
+    private System.Collections.IEnumerator SwitchTurn(int nextPlayer)
     {
-        isSwitchingTurn = true;
+        switchingTurn = true;
         Debug.Log($"⏳ Player {currentPlayer} selesai, ganti ke Player {nextPlayer}...");
 
         yield return new WaitForSeconds(endTurnDelay);
 
         currentPlayer = nextPlayer;
 
-        ActivatePlayer(player1, currentPlayer == 1);
-        ActivatePlayer(player2, currentPlayer == 2);
+        ActivatePlayerHamsters(1, currentPlayer == 1);
+        ActivatePlayerHamsters(2, currentPlayer == 2);
 
         Debug.Log($"🎯 Sekarang giliran Player {currentPlayer}");
-        isSwitchingTurn = false;
+        switchingTurn = false;
     }
 
-    private void ActivatePlayer(HamsterController player, bool active)
+    private void ActivatePlayerHamsters(int playerID, bool isActive)
     {
-        if (player == null) return;
+        var list = (playerID == 1) ? player1Hamsters : player2Hamsters;
 
-        player.enabled = active;
-
-        if (player.trajectory != null)
-            player.trajectory.gameObject.SetActive(active);
-    }
-
-    private void CheckGameOver()
-    {
-        if (player1 == null || player2 == null) return;
-
-        if (player1.hamsterHP <= 0 && !isGameOver)
+        for (int i = 0; i < list.Count; i++)
         {
-            Debug.Log("💀 Player 1 KALAH! Player 2 MENANG!");
-            isGameOver = true;
-            EndGame(2);
-        }
-        else if (player2.hamsterHP <= 0 && !isGameOver)
-        {
-            Debug.Log("💀 Player 2 KALAH! Player 1 MENANG!");
-            isGameOver = true;
-            EndGame(1);
+            // hanya hamster aktif (sesuai index giliran) yang bisa dikontrol
+            list[i].canControl = (i == currentHamsterIndex && isActive);
         }
     }
 
-    private void EndGame(int winner)
+    public HamsterController GetActiveHamster()
     {
-        Debug.Log($"🏆 Permainan selesai! Player {winner} MENANG!");
-        ActivatePlayer(player1, false);
-        ActivatePlayer(player2, false);
+        return currentPlayer == 1
+            ? player1Hamsters[currentHamsterIndex]
+            : player2Hamsters[currentHamsterIndex];
     }
+
+    public void OnHamsterDeath(HamsterController hamster)
+    {
+        if (hamster == null) return;
+        if (hamster.isDead == false) return;
+
+        // Tambah skor lawan
+        if (hamster.playerID == 1) player2Score++;
+        else player1Score++;
+
+        Debug.Log($"⚔️ Player {hamster.playerID} hamster mati! Skor: P1={player1Score} P2={player2Score}");
+
+        if (player1Score >= maxScore || player2Score >= maxScore)
+        {
+            EndGame();
+            return;
+        }
+
+        Transform spawn = (hamster.playerID == 1) ? player1Spawn : player2Spawn;
+
+        // Respawn di posisi awal
+        hamster.transform.position = spawn.position;
+        hamster.transform.rotation = Quaternion.identity;
+
+        // Reset fisika
+        hamster.rb.velocity = Vector2.zero;
+        hamster.rb.angularVelocity = 0f;
+        hamster.rb.Sleep();
+
+        // Revive hamster
+        hamster.hamsterHP = hamster.maxHP; // ✅ HP balik penuh
+        hamster.isDead = false;
+        hamster.isLaunched = false;
+        hamster.canControl = false;
+
+        Debug.Log($"💫 {hamster.name} dihidupkan kembali dengan HP {hamster.hamsterHP}/{hamster.maxHP}");
+    }
+
+
+
+
+    private void EndGame()
+    {
+        Debug.Log("🏆 Game Over!");
+        foreach (var h in player1Hamsters) h.canControl = false;
+        foreach (var h in player2Hamsters) h.canControl = false;
+        Time.timeScale = 0f;
+    }
+
+    public int CurrentPlayer => currentPlayer;
 }

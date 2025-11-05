@@ -7,7 +7,7 @@ public class HamsterController : MonoBehaviour
     public HamsterTrajectory trajectory;
 
     [Header("Stats")]
-    public float hamsterDamage = 5f, hamsterHP = 40f, allyDamage = 3f;
+    public float hamsterDamage = 5f, hamsterHP = 40f, maxHP = 40f, allyDamage = 3f;
 
     [Header("Movement")]
     public float initialSpeed = 7f;
@@ -26,6 +26,8 @@ public class HamsterController : MonoBehaviour
 
     [Header("Stop Threshold")]
     public float stopThreshold = 0.05f;
+    [HideInInspector] public bool isDead = false;
+
 
     public Rigidbody2D rb;
     private Vector2 dragStartPos;
@@ -61,7 +63,14 @@ public class HamsterController : MonoBehaviour
 
     private void Update()
     {
-        if (canControl && !isLaunched) HandleInput();
+        if (HamsterTurnManager.Instance == null) return;
+
+        // Cek apakah hamster ini milik player yang sedang giliran
+        bool isPlayerTurn = (playerID == HamsterTurnManager.Instance.CurrentPlayer);
+
+        // Hanya hamster milik pemain aktif yang boleh dikontrol
+        if (isPlayerTurn && canControl && !isLaunched)
+            HandleInput();
 
         HandleSpeedDecay();
         HardStopIfTooSlow(stopThreshold);
@@ -69,16 +78,22 @@ public class HamsterController : MonoBehaviour
 
     private void HandleInput()
     {
+        Vector2 mouseWorld = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+
         if (Input.GetMouseButtonDown(0))
         {
-            isDragging = true;
-            dragStartPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            aimZoneRenderer.gameObject.SetActive(true);
+            // Pastikan klik dimulai di dekat hamster ini
+            if (Vector2.Distance(mouseWorld, transform.position) <= 0.5f)
+            {
+                isDragging = true;
+                dragStartPos = mouseWorld;
+                aimZoneRenderer.gameObject.SetActive(true);
+            }
         }
 
         if (Input.GetMouseButton(0) && isDragging)
         {
-            Vector2 dragPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            Vector2 dragPos = mouseWorld;
             Vector2 dragVector = dragPos - dragStartPos;
             float dragDist = Mathf.Clamp(dragVector.magnitude, 0f, maxDragDistance);
             Vector2 launchDir = -dragVector.normalized;
@@ -88,7 +103,7 @@ public class HamsterController : MonoBehaviour
 
         if (Input.GetMouseButtonUp(0) && isDragging)
         {
-            Vector2 dragEnd = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            Vector2 dragEnd = mouseWorld;
             Vector2 dragVector = dragEnd - dragStartPos;
             float dragDist = dragVector.magnitude;
 
@@ -109,6 +124,7 @@ public class HamsterController : MonoBehaviour
             ResetDrag();
         }
     }
+
 
     private void ResetDrag()
     {
@@ -144,6 +160,7 @@ public class HamsterController : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D col)
     {
         if (col.contacts.Length == 0) return;
+
         var contact = col.contacts[0];
         Vector2 normal = contact.normal;
         Vector2 vBefore = rb.velocity;
@@ -162,25 +179,34 @@ public class HamsterController : MonoBehaviour
                 newSpeed *= hamsterCollideReduction;
                 rb.velocity = reflect * newSpeed;
 
-                // Ambil hamster lain yang ditabrak
-                HamsterController otherHamster = col.collider.GetComponent<HamsterController>();
-                if (otherHamster != null)
-                {
-                    // Hanya musuh yang kena damage
-                    if (HamsterTurnManager.Instance != null && 
-                        HamsterTurnManager.Instance.CurrentPlayer == playerID)
-                    {
-                        otherHamster.TakeDamage(hamsterDamage);
-                        Debug.Log($"💥 Player {playerID} menyerang Player {otherHamster.playerID} (-{hamsterDamage} HP)");
-                    }
+                HamsterController other = col.collider.GetComponent<HamsterController>();
+                if (other == null || other == this) break;
 
-                    // Dorong sedikit hamster lawan
-                    Rigidbody2D otherRb = col.collider.attachedRigidbody;
-                    if (otherRb != null)
-                    {
-                        Vector2 opposite = -normal * (newSpeed * 0.4f);
-                        otherRb.velocity += opposite;
-                    }
+                int currentTurn = HamsterTurnManager.Instance?.CurrentPlayer ?? -1;
+                HamsterController activeHamster = HamsterTurnManager.Instance?.GetActiveHamster();
+
+                bool sameTeam = (other.playerID == playerID);
+                bool myTurn = (playerID == currentTurn);
+                bool isActiveHamster = (activeHamster == this);
+
+                // 🚫 Tidak ada damage kalau sekubu
+                if (sameTeam) break;
+
+                // 🚫 Tidak ada damage kalau bukan giliran tim ini
+                if (!myTurn) break;
+
+                // 💥 Hanya hamster tim aktif yang bisa menyerang musuh
+                float damage = isActiveHamster ? hamsterDamage : allyDamage;
+                other.TakeDamage(damage);
+
+                Debug.Log($"💥 [TURN {currentTurn}] {name} (P{playerID}) menyerang {other.name} (P{other.playerID}) (-{damage} HP)");
+
+                // Dorongan fisik alami agar pantulan terasa realistis
+                Rigidbody2D otherRb = col.collider.attachedRigidbody;
+                if (otherRb != null)
+                {
+                    Vector2 push = -normal * (newSpeed * 0.25f);
+                    otherRb.AddForce(push, ForceMode2D.Impulse);
                 }
                 break;
 
@@ -190,14 +216,18 @@ public class HamsterController : MonoBehaviour
                 break;
         }
 
+        // 🚧 Cegah “nempel” di tembok saat kecepatan rendah
         if (rb.velocity.magnitude < 0.05f)
         {
             rb.velocity = Vector2.zero;
             rb.angularVelocity = 0f;
+            rb.Sleep();
         }
 
         Debug.DrawRay(contact.point, rb.velocity.normalized * 1.5f, Color.cyan, 0.3f);
     }
+
+
 
 
     private Sprite CreateCircleSprite()
@@ -248,13 +278,20 @@ public class HamsterController : MonoBehaviour
 
     public void TakeDamage(float amount)
     {
+        if (isDead) return;
+
         hamsterHP -= amount;
-        if (hamsterHP <= 0)
+        Debug.Log($"{name} (P{playerID}) took {amount} dmg => HP={hamsterHP}");
+
+        if (hamsterHP <= 0f)
         {
-            hamsterHP = 0;
-            Debug.Log($"💀 Player {playerID} mati!");
-            Destroy(gameObject);
+            hamsterHP = 0f;
+            isDead = true;
+            Debug.Log($"💀 Player {playerID} hamster mati!");
+            HamsterTurnManager.Instance?.OnHamsterDeath(this);
         }
     }
+
+
 
 }
