@@ -130,7 +130,8 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      munsterpink_0: -6421864677529318221
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

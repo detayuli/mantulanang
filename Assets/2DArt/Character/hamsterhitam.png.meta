@@ -130,7 +130,8 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      hamsterhitam_0: 5475257800024047311
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

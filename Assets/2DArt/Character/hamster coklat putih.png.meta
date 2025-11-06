@@ -130,7 +130,8 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      hamster coklat putih_0: 2985822871973537287
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -130,7 +130,8 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      munsterijo_0: 1435649887973508091
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
