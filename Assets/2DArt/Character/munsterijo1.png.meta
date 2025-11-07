@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 9c9902b2544d3ec41a6ea9e375acb0ad
+guid: 1e02426370b520a4eadb09a5adb7fc11
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 2985822871973537287
-    second: hamster coklat putih_0
+      213: 802713154139501052
+    second: munsterijo1_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -126,13 +126,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: hamster coklat putih_0
+      name: munsterijo1_0
       rect:
         serializedVersion: 2
-        x: 20
-        y: 27
-        width: 580
-        height: 561
+        x: 85
+        y: 95
+        width: 426
+        height: 451
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -140,8 +140,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 706283e1516cf6920800000000000000
-      internalID: 2985822871973537287
+      spriteID: cf1b4095c5fc32b00800000000000000
+      internalID: 802713154139501052
       vertices: []
       indices: 
       edges: []
@@ -157,7 +157,7 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      hamster coklat putih_0: 2985822871973537287
+      munsterijo1_0: 802713154139501052
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

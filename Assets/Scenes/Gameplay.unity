@@ -207,11 +207,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5507828271829583920, guid: 6612ed258a36c7a4c8497b4660cb7d93, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -3.49
+      value: -4.61
       objectReference: {fileID: 0}
     - target: {fileID: 5507828271829583920, guid: 6612ed258a36c7a4c8497b4660cb7d93, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.4498332
+      value: 1.51
       objectReference: {fileID: 0}
     - target: {fileID: 5507828271829583920, guid: 6612ed258a36c7a4c8497b4660cb7d93, type: 3}
       propertyPath: m_LocalPosition.z
@@ -605,7 +605,7 @@ MonoBehaviour:
   player1Spawn: {fileID: 1002777764}
   player2Spawn: {fileID: 1543934698}
   maxScore: 4
-  endTurnDelay: 1.5
+  endTurnDelay: 1
   minVelocityToSwitch: 0.1
 --- !u!4 &656115628
 Transform:
@@ -802,11 +802,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7893523890233103680, guid: 25715a3e7ca7902458f1df4a92d48c8e, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -4.57
+      value: -3.49
       objectReference: {fileID: 0}
     - target: {fileID: 7893523890233103680, guid: 25715a3e7ca7902458f1df4a92d48c8e, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.6
+      value: -0.4498332
       objectReference: {fileID: 0}
     - target: {fileID: 7893523890233103680, guid: 25715a3e7ca7902458f1df4a92d48c8e, type: 3}
       propertyPath: m_LocalPosition.z
@@ -1151,6 +1151,10 @@ PrefabInstance:
     - target: {fileID: 104609529554044304, guid: d3e6f8f265001224094459173a3c2c81, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5001080859142791410, guid: d3e6f8f265001224094459173a3c2c81, type: 3}
+      propertyPath: m_DynamicOccludee
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5165535513669249130, guid: d3e6f8f265001224094459173a3c2c81, type: 3}
       propertyPath: m_Name

@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 3afebdfff13b7c642b8be6ee4d3b33df
+guid: d1e6d2a90c823f0449a2c0b76eb5eec5
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -6421864677529318221
-    second: munsterpink_0
+      213: -6323286435920528574
+    second: sangepink_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -37,7 +37,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 1
+    filterMode: 0
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -72,7 +72,7 @@ TextureImporter:
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
-    maxTextureSize: 2048
+    maxTextureSize: 4096
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 1
@@ -96,17 +96,43 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Windows Store Apps
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: munsterpink_0
+      name: sangepink_0
       rect:
         serializedVersion: 2
-        x: 85
-        y: 95
-        width: 426
-        height: 451
+        x: 1
+        y: 40
+        width: 598
+        height: 549
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -114,8 +140,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 3bc8c3ca914f0e6a0800000000000000
-      internalID: -6421864677529318221
+      spriteID: 24b39ed1d7c2f38a0800000000000000
+      internalID: -6323286435920528574
       vertices: []
       indices: 
       edges: []
@@ -131,7 +157,7 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      munsterpink_0: -6421864677529318221
+      sangepink_0: -6323286435920528574
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

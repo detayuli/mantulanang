@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: c361c6e983c28b446a8ea29794bf7cdb
+guid: 7608a362d355fe54caf61c8f4c0cfbfb
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 1435649887973508091
-    second: munsterijo_0
+      213: -8300680104530593805
+    second: hamstersange_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -37,7 +37,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 1
+    filterMode: 0
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -72,7 +72,7 @@ TextureImporter:
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
-    maxTextureSize: 2048
+    maxTextureSize: 4096
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 1
@@ -96,17 +96,43 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Windows Store Apps
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: munsterijo_0
+      name: hamstersange_0
       rect:
         serializedVersion: 2
-        x: 85
-        y: 95
-        width: 426
-        height: 451
+        x: 1
+        y: 40
+        width: 598
+        height: 549
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -114,8 +140,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: bf38d7a77f37ce310800000000000000
-      internalID: 1435649887973508091
+      spriteID: 3f73d4f7c6f0ecc80800000000000000
+      internalID: -8300680104530593805
       vertices: []
       indices: 
       edges: []
@@ -131,7 +157,7 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      munsterijo_0: 1435649887973508091
+      hamstersange_0: -8300680104530593805
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
