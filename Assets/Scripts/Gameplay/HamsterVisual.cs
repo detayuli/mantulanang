@@ -21,6 +21,17 @@ public class HamsterVisual : MonoBehaviour
     [SerializeField] private Color trailColor;
     private Material trailMat;
 
+    // Hit Effect
+    [Header("Hit Effect")]
+    [SerializeField] private ParticleSystem hitParticle;
+    [SerializeField] private Transform particleParent;
+
+    // Shake Camera
+    [Header("Shake Camera")]
+    [SerializeField] private AnimationCurve shakeCurve;
+    [SerializeField] private float shakeDamper;
+    [SerializeField] private float shakeTime;
+    Vector3 originalPos;
 
     void Start()
     {
@@ -31,6 +42,10 @@ public class HamsterVisual : MonoBehaviour
 
         trailMat = trailRenderer.material;
         trailMat.SetColor("_Color", trailColor);
+
+        controller.OnHit = (pos) => SpawnHit(pos);
+
+        Vector3 originalPos = Camera.main.transform.localPosition;
     }
 
     void Update()
@@ -59,4 +74,40 @@ public class HamsterVisual : MonoBehaviour
         auraMat.SetFloat("_AuraPower", 0);
         auraActive = false;
     }
+
+    public void SpawnHit(Vector3 pos)
+    {
+        ParticleSystem hit = Instantiate(hitParticle, pos, Quaternion.identity, particleParent);
+        Destroy(hit.gameObject, hit.main.startLifetime.constantMax);
+        ShakeCamera(shakeDamper, shakeTime);
+    }
+
+    public void ShakeCamera(float power, float duration)
+    {
+        StartCoroutine(SimpleShake(power, duration));
+    }
+
+    IEnumerator SimpleShake(float power, float duration)
+    {
+        Transform cam = Camera.main.transform;
+        Vector3 originalPos = cam.localPosition;
+
+        float elapsed = 0f;
+
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+
+            float offsetX = Random.Range(-1f, 1f) * power;
+            float offsetY = Random.Range(-1f, 1f) * power;
+
+            cam.localPosition = originalPos + new Vector3(offsetX, offsetY, 0);
+
+            yield return null;
+        }
+
+        cam.localPosition = originalPos;
+    }
+
+
 }

@@ -1,8 +1,11 @@
+using System;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
 public class HamsterController : MonoBehaviour
 {
+    public Action<Vector2> OnHit;
+
     [Header("References")]
     public HamsterTrajectory trajectory;
 
@@ -198,6 +201,8 @@ public class HamsterController : MonoBehaviour
 
                 // 🚫 Tidak ada damage kalau bukan giliran tim ini
                 if (!myTurn) break;
+
+                OnHit?.Invoke(contact.point);
 
                 // 💥 Hanya hamster tim aktif yang bisa menyerang musuh
                 float damage = isActiveHamster ? hamsterDamage : allyDamage;
