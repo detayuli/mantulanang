@@ -98,6 +98,10 @@ public class HamsterController : MonoBehaviour
             float dragDist = Mathf.Clamp(dragVector.magnitude, 0f, maxDragDistance);
             Vector2 launchDir = -dragVector.normalized;
 
+            // test rotasi
+            float angle = Mathf.Atan2(launchDir.y, launchDir.x) * Mathf.Rad2Deg;
+            transform.rotation = Quaternion.Euler(0, 0, angle);
+
             trajectory?.ShowTrajectory(transform.position, launchDir, dragDist);
         }
 
