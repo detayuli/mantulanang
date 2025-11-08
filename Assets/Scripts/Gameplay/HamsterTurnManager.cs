@@ -4,6 +4,13 @@ using System.Collections.Generic;
 public class HamsterTurnManager : MonoBehaviour
 {
     public static HamsterTurnManager Instance;
+    
+    // Events for UI
+    public delegate void TurnChangedHandler(int newPlayerTurn);
+    public event TurnChangedHandler OnTurnChanged;
+    
+    public delegate void ScoreChangedHandler(int player1Score, int player2Score);
+    public event ScoreChangedHandler OnScoreChanged;
 
     [Header("Players")]
     public List<HamsterController> player1Hamsters;
@@ -21,7 +28,9 @@ public class HamsterTurnManager : MonoBehaviour
     private int player1Score = 0;
     private int player2Score = 0;
     private int currentPlayer = 1;
-    private int currentHamsterIndex = 0;
+    // Keep per-player selected hamster indices so each player can choose independently
+    private int currentHamsterIndexP1 = 0;
+    private int currentHamsterIndexP2 = 0;
     private bool switchingTurn = false;
 
     private void Awake()
@@ -38,7 +47,7 @@ public class HamsterTurnManager : MonoBehaviour
         foreach (var h in player2Hamsters)
             h.playerID = 2;
 
-        // Aktifkan giliran awal
+        // Aktifkan giliran awal (set hanya hamster yang dipilih untuk bisa dikontrol)
         ActivatePlayerHamsters(1, true);
         ActivatePlayerHamsters(2, false);
     }
@@ -54,11 +63,42 @@ public class HamsterTurnManager : MonoBehaviour
         }
     }
 
+    // Allow external selection of a hamster (e.g., by clicking it).
+    public void SelectHamster(HamsterController hamster)
+    {
+        if (hamster == null) return;
+        if (hamster.isDead)
+        {
+            Debug.Log("Cannot select a dead hamster.");
+            return;
+        }
+        if (hamster.playerID != currentPlayer)
+        {
+            Debug.Log("Cannot select a hamster that is not on the current player's side.");
+            return;
+        }
+
+        var list = (currentPlayer == 1) ? player1Hamsters : player2Hamsters;
+        int idx = list.IndexOf(hamster);
+        if (idx < 0) return;
+
+        if (currentPlayer == 1) currentHamsterIndexP1 = idx;
+        else currentHamsterIndexP2 = idx;
+
+        // Refresh control flags
+        ActivatePlayerHamsters(1, currentPlayer == 1);
+        ActivatePlayerHamsters(2, currentPlayer == 2);
+
+        Debug.Log($"Selected hamster {hamster.name} (index {idx}) for Player {currentPlayer}");
+    }
+
     private System.Collections.IEnumerator SwitchTurn(int nextPlayer)
     {
         switchingTurn = true;
         Debug.Log($"⏳ Player {currentPlayer} selesai, ganti ke Player {nextPlayer}...");
 
+        // Tunggu UI turn indicator selesai
+        GameUIManager.Instance.ShowTurnIndicator($"Player {nextPlayer}'s Turn");
         yield return new WaitForSeconds(endTurnDelay);
 
         currentPlayer = nextPlayer;
@@ -66,6 +106,7 @@ public class HamsterTurnManager : MonoBehaviour
         ActivatePlayerHamsters(1, currentPlayer == 1);
         ActivatePlayerHamsters(2, currentPlayer == 2);
 
+        OnTurnChanged?.Invoke(currentPlayer);
         Debug.Log($"🎯 Sekarang giliran Player {currentPlayer}");
         switchingTurn = false;
     }
@@ -73,19 +114,37 @@ public class HamsterTurnManager : MonoBehaviour
     private void ActivatePlayerHamsters(int playerID, bool isActive)
     {
         var list = (playerID == 1) ? player1Hamsters : player2Hamsters;
+        int selectedIndex = (playerID == 1) ? currentHamsterIndexP1 : currentHamsterIndexP2;
 
         for (int i = 0; i < list.Count; i++)
         {
-            // hanya hamster aktif (sesuai index giliran) yang bisa dikontrol
-            list[i].canControl = (i == currentHamsterIndex && isActive);
+            // hanya hamster yang dipilih saja yang dapat dikontrol saat giliran aktif
+            bool shouldControl = isActive && (i == selectedIndex);
+            list[i].canControl = shouldControl;
         }
     }
 
     public HamsterController GetActiveHamster()
     {
-        return currentPlayer == 1
-            ? player1Hamsters[currentHamsterIndex]
-            : player2Hamsters[currentHamsterIndex];
+        try
+        {
+            if (currentPlayer == 1)
+            {
+                if (player1Hamsters == null || player1Hamsters.Count == 0) return null;
+                int idx = Mathf.Clamp(currentHamsterIndexP1, 0, player1Hamsters.Count - 1);
+                return player1Hamsters[idx];
+            }
+            else
+            {
+                if (player2Hamsters == null || player2Hamsters.Count == 0) return null;
+                int idx = Mathf.Clamp(currentHamsterIndexP2, 0, player2Hamsters.Count - 1);
+                return player2Hamsters[idx];
+            }
+        }
+        catch
+        {
+            return null;
+        }
     }
 
     public void OnHamsterDeath(HamsterController hamster)
@@ -98,6 +157,11 @@ public class HamsterTurnManager : MonoBehaviour
         else player1Score++;
 
         Debug.Log($"⚔️ Player {hamster.playerID} hamster mati! Skor: P1={player1Score} P2={player2Score}");
+
+        // Update UI hearts
+        OnScoreChanged?.Invoke(player1Score, player2Score);
+        GameUIManager.Instance?.UpdatePlayerHearts(1, maxScore - player1Score);
+        GameUIManager.Instance?.UpdatePlayerHearts(2, maxScore - player2Score);
 
         if (player1Score >= maxScore || player2Score >= maxScore)
         {

@@ -39,6 +39,8 @@ public class HamsterController : MonoBehaviour
     [HideInInspector] public bool canControl = true;
 
 
+    private HamsterStatusUI statusUI;
+
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -48,6 +50,12 @@ public class HamsterController : MonoBehaviour
         rb.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
         rb.sleepMode = RigidbodySleepMode2D.StartAsleep;
         rb.interpolation = RigidbodyInterpolation2D.Interpolate;
+
+        statusUI = GetComponentInChildren<HamsterStatusUI>();
+        if (statusUI != null)
+        {
+            statusUI.Initialize(this);
+        }
 
         // Buat lingkaran area cancel
         var aimZone = new GameObject("AimZoneVisual");
@@ -127,6 +135,18 @@ public class HamsterController : MonoBehaviour
             isLaunched = true;
             ResetDrag();
         }
+
+    }
+
+    void OnMouseDown()
+    {
+        // Allow selecting this hamster when clicked if it's the current player's turn
+        if (HamsterTurnManager.Instance == null) return;
+        if (isDead) return;
+        if (playerID != HamsterTurnManager.Instance.CurrentPlayer) return;
+        if (isLaunched) return; // don't allow selection while launched
+
+        HamsterTurnManager.Instance.SelectHamster(this);
     }
 
 
