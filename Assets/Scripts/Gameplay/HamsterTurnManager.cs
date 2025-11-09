@@ -174,6 +174,7 @@ public class HamsterTurnManager : MonoBehaviour
         // Respawn di posisi awal
         hamster.transform.position = spawn.position;
         hamster.transform.rotation = Quaternion.identity;
+        audiomanager.Instance.PlaySFX(audiomanager.Instance.HamsterRespawn);
 
         // Reset fisika
         hamster.rb.velocity = Vector2.zero;

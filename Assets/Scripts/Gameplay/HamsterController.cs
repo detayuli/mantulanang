@@ -43,6 +43,7 @@ public class HamsterController : MonoBehaviour
 
 
     private HamsterStatusUI statusUI;
+    private HamsterPhysicsReflector physicsReflector;
 
     private void Awake()
     {
@@ -53,6 +54,7 @@ public class HamsterController : MonoBehaviour
         rb.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
         rb.sleepMode = RigidbodySleepMode2D.StartAsleep;
         rb.interpolation = RigidbodyInterpolation2D.Interpolate;
+        physicsReflector = GetComponent<HamsterPhysicsReflector>();
 
         statusUI = GetComponentInChildren<HamsterStatusUI>();
         if (statusUI != null)
@@ -86,6 +88,8 @@ public class HamsterController : MonoBehaviour
         HandleSpeedDecay();
         HardStopIfTooSlow(stopThreshold);
     }
+
+
 
     private void HandleInput()
     {
@@ -194,17 +198,27 @@ public class HamsterController : MonoBehaviour
         Vector2 reflect = Vector2.Reflect(vBefore, normal).normalized;
         float newSpeed = vBefore.magnitude;
 
+        // Gunakan sistem pantulan realistis dari HamsterPhysicsReflector
+        // (pakai nilai default kalau tidak ditemukan)
+        HamsterPhysicsReflector reflector = GetComponent<HamsterPhysicsReflector>();
+        float restitution = reflector != null ? reflector.restitution : 0.8f;
+        float friction = reflector != null ? reflector.friction : 0.1f;
+
+        // Hitung pantulan dengan rumus fisika (lebih realistis)
+        Vector2 bouncedVelocity = HamsterPhysicsReflector.ComputeBounce(vBefore, normal, restitution, friction);
+
         switch (col.collider.tag)
         {
             case "Border":
                 newSpeed *= borderCollideReduction;
-                rb.velocity = reflect * newSpeed + normal * 0.25f;
+                rb.velocity = bouncedVelocity * borderCollideReduction + normal * 0.25f;
                 transform.position += (Vector3)(normal * 0.02f);
+                audiomanager.Instance.PlaySFX(audiomanager.Instance.CollideBorder);
                 break;
 
             case "Hamster":
                 newSpeed *= hamsterCollideReduction;
-                rb.velocity = reflect * newSpeed;
+                rb.velocity = bouncedVelocity * hamsterCollideReduction;
 
                 HamsterController other = col.collider.GetComponent<HamsterController>();
                 if (other == null || other == this) break;
@@ -237,11 +251,12 @@ public class HamsterController : MonoBehaviour
                     Vector2 push = -normal * (newSpeed * 0.25f);
                     otherRb.AddForce(push, ForceMode2D.Impulse);
                 }
+                audiomanager.Instance.PlaySFX(audiomanager.Instance.CollideHamster);
                 break;
 
             case "Obstacle":
                 newSpeed *= obstacleCollideReduction;
-                rb.velocity = reflect * newSpeed;
+                rb.velocity = bouncedVelocity * obstacleCollideReduction;
                 break;
         }
 
@@ -255,8 +270,6 @@ public class HamsterController : MonoBehaviour
 
         Debug.DrawRay(contact.point, rb.velocity.normalized * 1.5f, Color.cyan, 0.3f);
     }
-
-
 
 
     private Sprite CreateCircleSprite()
@@ -318,6 +331,7 @@ public class HamsterController : MonoBehaviour
             isDead = true;
             Debug.Log($"💀 Player {playerID} hamster mati!");
             HamsterTurnManager.Instance?.OnHamsterDeath(this);
+            audiomanager.Instance.PlaySFX(audiomanager.Instance.HamsterTewas);
         }
     }
 

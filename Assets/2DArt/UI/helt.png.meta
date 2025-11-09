@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: b5c3ee7cb4cb2e34a86ca4210b693a67
+guid: 503dd65e517bff44cb8a56715f0883e6
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 686982029049641589
-    second: Pagar_0
+      213: 1123606124898603600
+    second: helt_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -126,13 +126,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Pagar_0
+      name: helt_0
       rect:
         serializedVersion: 2
-        x: 123
-        y: 41
-        width: 1189
-        height: 732
+        x: 47
+        y: 65
+        width: 506
+        height: 418
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -140,8 +140,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 57ab4900486a88900800000000000000
-      internalID: 686982029049641589
+      spriteID: 052d80641d9d79f00800000000000000
+      internalID: 1123606124898603600
       vertices: []
       indices: 
       edges: []

@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: f58963041246c3b469314604e42cc7cb
+guid: 3765fbb576311454ead32a4c7b31a894
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 8349521297826551613
-    second: pagar horizontal_0
+      213: -4660095295743317812
+    second: smash_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -126,13 +126,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: pagar horizontal_0
+      name: smash_0
       rect:
         serializedVersion: 2
-        x: 0
-        y: 217
-        width: 600
-        height: 166
+        x: 8
+        y: 1
+        width: 592
+        height: 597
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -140,8 +140,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: d379289f1657fd370800000000000000
-      internalID: 8349521297826551613
+      spriteID: cc820cdc404045fb0800000000000000
+      internalID: -4660095295743317812
       vertices: []
       indices: 
       edges: []
@@ -156,8 +156,7 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable:
-      pagar horizontal_0: 8349521297826551613
+    nameFileIdTable: {}
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
