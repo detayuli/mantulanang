@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 5bcec162399d4564991e1e0c18df0c39
+guid: a7fc9d2fa85505143867bc5a31a01df5
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 4385320136766471155
-    second: pagar vertikal 1_0
+      213: 522990676421814719
+    second: circle_glass_diff_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -97,32 +97,6 @@ TextureImporter:
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
-    buildTarget: WebGL
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    ignorePlatformSupport: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 3
-    buildTarget: Windows Store Apps
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    ignorePlatformSupport: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 3
     buildTarget: Android
     maxTextureSize: 2048
     resizeAlgorithm: 0
@@ -139,13 +113,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: pagar vertikal 1_0
+      name: circle_glass_diff_0
       rect:
         serializedVersion: 2
-        x: 267
+        x: 3
         y: 0
-        width: 65
-        height: 600
+        width: 1021
+        height: 1023
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -153,8 +127,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 3fb35521e69cbdc30800000000000000
-      internalID: 4385320136766471155
+      spriteID: fb9a6f0df39024700800000000000000
+      internalID: 522990676421814719
       vertices: []
       indices: 
       edges: []
@@ -169,8 +143,7 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable:
-      pagar vertikal 1_0: 4385320136766471155
+    nameFileIdTable: {}
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
