@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7278921883918935869}
   - component: {fileID: 6362772697705508770}
-  m_Layer: 0
+  m_Layer: 1
   m_Name: Glass
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -74,7 +74,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_Sprite: {fileID: 522990676421814719, guid: a7fc9d2fa85505143867bc5a31a01df5, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0

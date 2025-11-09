@@ -1,10 +1,13 @@
 fileFormatVersion: 2
-guid: 682a7d12120c7e240a8c5a92d27b806f
+guid: 212687c9001898147bb08f15650322ec
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 2641698482785147981
-    second: Group 1_0
+      213: 4369572136041557648
+    second: title_0
+  - first:
+      213: 3918735734063839423
+    second: title_1
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -126,22 +129,43 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Group 1_0
+      name: title_0
       rect:
         serializedVersion: 2
-        x: 0
-        y: 61
-        width: 742
-        height: 258
+        x: 93
+        y: 412
+        width: 828
+        height: 189
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: d4cd81616c239a420800000000000000
-      internalID: 2641698482785147981
+      spriteID: 09ea33de4b6d3ac30800000000000000
+      internalID: 4369572136041557648
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: title_1
+      rect:
+        serializedVersion: 2
+        x: 716
+        y: 412
+        width: 204
+        height: 148
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fb831854365226630800000000000000
+      internalID: 3918735734063839423
       vertices: []
       indices: 
       edges: []
@@ -149,7 +173,7 @@ TextureImporter:
     outline: []
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 4ccc87c8b21c7514ea0ad24a719ef2ec
     internalID: 0
     vertices: []
     indices: 
@@ -157,7 +181,8 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Group 1_0: 2641698482785147981
+      title_0: 4369572136041557648
+      title_1: 3918735734063839423
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

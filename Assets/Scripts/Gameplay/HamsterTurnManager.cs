@@ -1,5 +1,8 @@
 using UnityEngine;
 using System.Collections.Generic;
+using TMPro;
+using System.Collections;
+using DG.Tweening;
 
 public class HamsterTurnManager : MonoBehaviour
 {
@@ -37,20 +40,31 @@ public class HamsterTurnManager : MonoBehaviour
     {
         Instance = this;
     }
+    private IEnumerator StartGameSequence()
+    {
+        // Tampilkan countdown
+        yield return GameUIManager.Instance.ShowCountdown();
+
+        // Setelah countdown, baru aktifkan hamster Player 1
+        ActivatePlayerHamsters(1, true);
+        ActivatePlayerHamsters(2, false);
+
+        // Tampilkan turn indicator awal
+        GameUIManager.Instance.ShowTurnIndicator(1);
+    }
 
     private void Start()
     {
         // Pastikan semua hamster tahu playerID-nya
         foreach (var h in player1Hamsters)
             h.playerID = 1;
-
         foreach (var h in player2Hamsters)
             h.playerID = 2;
 
-        // Aktifkan giliran awal (set hanya hamster yang dipilih untuk bisa dikontrol)
-        ActivatePlayerHamsters(1, true);
-        ActivatePlayerHamsters(2, false);
+        // Mulai sequence
+        StartCoroutine(StartGameSequence());
     }
+
 
     private void Update()
     {
@@ -98,7 +112,7 @@ public class HamsterTurnManager : MonoBehaviour
         Debug.Log($"⏳ Player {currentPlayer} selesai, ganti ke Player {nextPlayer}...");
 
         // Tunggu UI turn indicator selesai
-        GameUIManager.Instance.ShowTurnIndicator($"Player {nextPlayer}'s Turn");
+        GameUIManager.Instance.ShowTurnIndicator(nextPlayer);
         yield return new WaitForSeconds(endTurnDelay);
 
         currentPlayer = nextPlayer;
@@ -180,6 +194,7 @@ public class HamsterTurnManager : MonoBehaviour
         hamster.rb.velocity = Vector2.zero;
         hamster.rb.angularVelocity = 0f;
         hamster.rb.Sleep();
+        hamster.rb.WakeUp();
 
         // Revive hamster
         hamster.hamsterHP = hamster.maxHP; // ✅ HP balik penuh
@@ -191,15 +206,25 @@ public class HamsterTurnManager : MonoBehaviour
     }
 
 
-
-
     private void EndGame()
     {
         Debug.Log("🏆 Game Over!");
         foreach (var h in player1Hamsters) h.canControl = false;
         foreach (var h in player2Hamsters) h.canControl = false;
+
+        int winner = (player1Score > player2Score) ? 1 : 2;
+        GameUIManager.Instance?.ShowWinScreen(winner);
+
+        // Delay sedikit sebelum pause
+        StartCoroutine(PauseAfterDelay());
+    }
+
+    private IEnumerator PauseAfterDelay()
+    {
+        yield return new WaitForSecondsRealtime(1f);
         Time.timeScale = 0f;
     }
+
 
     public int CurrentPlayer => currentPlayer;
 }
