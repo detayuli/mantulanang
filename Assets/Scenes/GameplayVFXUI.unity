@@ -378,6 +378,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 240044911}
     m_Modifications:
+    - target: {fileID: 254209378598610609, guid: 353074e618ce23c4c87d91df69300c9f, type: 3}
+      propertyPath: m_LinearDrag
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 523990970352802950, guid: 353074e618ce23c4c87d91df69300c9f, type: 3}
       propertyPath: m_Color.b
       value: 0.78113204
@@ -453,6 +457,10 @@ PrefabInstance:
     - target: {fileID: 7624508507621786993, guid: 353074e618ce23c4c87d91df69300c9f, type: 3}
       propertyPath: hamsterDamage
       value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 7624508507621786993, guid: 353074e618ce23c4c87d91df69300c9f, type: 3}
+      propertyPath: hamsterCollideReduction
+      value: 0.8
       objectReference: {fileID: 0}
     - target: {fileID: 7943558199870405520, guid: 353074e618ce23c4c87d91df69300c9f, type: 3}
       propertyPath: lineWidthEnd
@@ -2527,6 +2535,14 @@ PrefabInstance:
     - target: {fileID: 2005308593454485625, guid: 25715a3e7ca7902458f1df4a92d48c8e, type: 3}
       propertyPath: hamsterDamage
       value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 2005308593454485625, guid: 25715a3e7ca7902458f1df4a92d48c8e, type: 3}
+      propertyPath: hamsterCollideReduction
+      value: 0.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 2943521747646931041, guid: 25715a3e7ca7902458f1df4a92d48c8e, type: 3}
+      propertyPath: m_LinearDrag
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4361924800373322516, guid: 25715a3e7ca7902458f1df4a92d48c8e, type: 3}
       propertyPath: lineWidthEnd
@@ -12544,6 +12560,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 324671152}
     m_Modifications:
+    - target: {fileID: 919021941315047841, guid: 07b805563d6759142a172b59736d7c49, type: 3}
+      propertyPath: m_LinearDrag
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 962984412017439117, guid: 07b805563d6759142a172b59736d7c49, type: 3}
       propertyPath: m_Color.b
       value: 0.4117647
@@ -12667,6 +12687,10 @@ PrefabInstance:
     - target: {fileID: 8616537167035552556, guid: 07b805563d6759142a172b59736d7c49, type: 3}
       propertyPath: hamsterDamage
       value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 8616537167035552556, guid: 07b805563d6759142a172b59736d7c49, type: 3}
+      propertyPath: hamsterCollideReduction
+      value: 0.8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -13323,6 +13347,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1494779821824118102, guid: d3e6f8f265001224094459173a3c2c81, type: 3}
+      propertyPath: m_LinearDrag
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1732862159562281024, guid: d3e6f8f265001224094459173a3c2c81, type: 3}
       propertyPath: defaultActivationPower
       value: 1
@@ -13426,6 +13454,10 @@ PrefabInstance:
     - target: {fileID: 6396835765705655119, guid: d3e6f8f265001224094459173a3c2c81, type: 3}
       propertyPath: hamsterDamage
       value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 6396835765705655119, guid: d3e6f8f265001224094459173a3c2c81, type: 3}
+      propertyPath: hamsterCollideReduction
+      value: 0.8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -18986,6 +19018,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 324671152}
     m_Modifications:
+    - target: {fileID: 208674519295153210, guid: 6612ed258a36c7a4c8497b4660cb7d93, type: 3}
+      propertyPath: m_LinearDrag
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2556452210383140204, guid: 6612ed258a36c7a4c8497b4660cb7d93, type: 3}
       propertyPath: maxHP
       value: 30
@@ -19005,6 +19041,10 @@ PrefabInstance:
     - target: {fileID: 2556452210383140204, guid: 6612ed258a36c7a4c8497b4660cb7d93, type: 3}
       propertyPath: hamsterDamage
       value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 2556452210383140204, guid: 6612ed258a36c7a4c8497b4660cb7d93, type: 3}
+      propertyPath: hamsterCollideReduction
+      value: 0.8
       objectReference: {fileID: 0}
     - target: {fileID: 3010869480921130016, guid: 6612ed258a36c7a4c8497b4660cb7d93, type: 3}
       propertyPath: m_Color.b
@@ -29303,6 +29343,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1000839295413500464, guid: 2c6bb453e9c1c0b4da2a975eac571b08, type: 3}
+      propertyPath: m_LinearDrag
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2311196579493231389, guid: 2c6bb453e9c1c0b4da2a975eac571b08, type: 3}
       propertyPath: m_Parameters.colorGradient.atime1
       value: 65535
@@ -29342,6 +29386,10 @@ PrefabInstance:
     - target: {fileID: 2869868349481317119, guid: 2c6bb453e9c1c0b4da2a975eac571b08, type: 3}
       propertyPath: hamsterDamage
       value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 2869868349481317119, guid: 2c6bb453e9c1c0b4da2a975eac571b08, type: 3}
+      propertyPath: hamsterCollideReduction
+      value: 0.8
       objectReference: {fileID: 0}
     - target: {fileID: 4950195360548173129, guid: 2c6bb453e9c1c0b4da2a975eac571b08, type: 3}
       propertyPath: m_Name

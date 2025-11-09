@@ -83,12 +83,10 @@ public class HamsterTurnManager : MonoBehaviour
         if (hamster == null) return;
         if (hamster.isDead)
         {
-            Debug.Log("Cannot select a dead hamster.");
             return;
         }
         if (hamster.playerID != currentPlayer)
         {
-            Debug.Log("Cannot select a hamster that is not on the current player's side.");
             return;
         }
 
@@ -103,13 +101,11 @@ public class HamsterTurnManager : MonoBehaviour
         ActivatePlayerHamsters(1, currentPlayer == 1);
         ActivatePlayerHamsters(2, currentPlayer == 2);
 
-        Debug.Log($"Selected hamster {hamster.name} (index {idx}) for Player {currentPlayer}");
     }
 
     private System.Collections.IEnumerator SwitchTurn(int nextPlayer)
     {
         switchingTurn = true;
-        Debug.Log($"⏳ Player {currentPlayer} selesai, ganti ke Player {nextPlayer}...");
 
         // Tunggu UI turn indicator selesai
         GameUIManager.Instance.ShowTurnIndicator(nextPlayer);
@@ -121,7 +117,6 @@ public class HamsterTurnManager : MonoBehaviour
         ActivatePlayerHamsters(2, currentPlayer == 2);
 
         OnTurnChanged?.Invoke(currentPlayer);
-        Debug.Log($"🎯 Sekarang giliran Player {currentPlayer}");
         switchingTurn = false;
     }
 
@@ -170,8 +165,6 @@ public class HamsterTurnManager : MonoBehaviour
         if (hamster.playerID == 1) player2Score++;
         else player1Score++;
 
-        Debug.Log($"⚔️ Player {hamster.playerID} hamster mati! Skor: P1={player1Score} P2={player2Score}");
-
         // Update UI hearts
         OnScoreChanged?.Invoke(player1Score, player2Score);
         GameUIManager.Instance?.UpdatePlayerHearts(1, maxScore - player1Score);
@@ -193,22 +186,17 @@ public class HamsterTurnManager : MonoBehaviour
         // Reset fisika
         hamster.rb.velocity = Vector2.zero;
         hamster.rb.angularVelocity = 0f;
-        hamster.rb.Sleep();
-        hamster.rb.WakeUp();
 
         // Revive hamster
         hamster.hamsterHP = hamster.maxHP; // ✅ HP balik penuh
         hamster.isDead = false;
         hamster.isLaunched = false;
         hamster.canControl = false;
-
-        Debug.Log($"💫 {hamster.name} dihidupkan kembali dengan HP {hamster.hamsterHP}/{hamster.maxHP}");
     }
 
 
     private void EndGame()
     {
-        Debug.Log("🏆 Game Over!");
         foreach (var h in player1Hamsters) h.canControl = false;
         foreach (var h in player2Hamsters) h.canControl = false;
 

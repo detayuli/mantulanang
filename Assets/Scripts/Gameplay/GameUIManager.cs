@@ -132,7 +132,6 @@ public class GameUIManager : MonoBehaviour
         yield return new WaitForSecondsRealtime(winFadeDuration);
         restartButton.gameObject.SetActive(true);
 
-        Debug.Log($"🎉 Player {winnerPlayer} menang!");
     }
 
     public IEnumerator ShowCountdown()

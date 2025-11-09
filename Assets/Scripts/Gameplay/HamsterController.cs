@@ -52,7 +52,6 @@ public class HamsterController : MonoBehaviour
         rb.drag = 0;
         rb.angularDrag = 0.05f;
         rb.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
-        rb.sleepMode = RigidbodySleepMode2D.StartAsleep;
         rb.interpolation = RigidbodyInterpolation2D.Interpolate;
         physicsReflector = GetComponent<HamsterPhysicsReflector>();
 
@@ -184,7 +183,6 @@ public class HamsterController : MonoBehaviour
         {
             rb.velocity = Vector2.zero;
             rb.angularVelocity = 0f;
-            rb.Sleep();
         }
     }
 
@@ -217,12 +215,24 @@ public class HamsterController : MonoBehaviour
                 break;
 
             case "Hamster":
+            {
                 newSpeed *= hamsterCollideReduction;
                 rb.velocity = bouncedVelocity * hamsterCollideReduction;
 
                 HamsterController other = col.collider.GetComponent<HamsterController>();
                 if (other == null || other == this) break;
 
+                Rigidbody2D otherRb = col.collider.attachedRigidbody;
+                if (otherRb != null)
+                {
+                    otherRb.WakeUp();
+
+                    // 🧠 Selalu beri dorongan fisika walau beda tim / giliran
+                    Vector2 push = -normal * (newSpeed * 0.25f);
+                    otherRb.AddForce(push, ForceMode2D.Impulse);
+                }
+
+                // --- DAMAGE LOGIC DI BAWAH INI ---
                 int currentTurn = HamsterTurnManager.Instance?.CurrentPlayer ?? -1;
                 HamsterController activeHamster = HamsterTurnManager.Instance?.GetActiveHamster();
 
@@ -230,29 +240,16 @@ public class HamsterController : MonoBehaviour
                 bool myTurn = (playerID == currentTurn);
                 bool isActiveHamster = (activeHamster == this);
 
-                // 🚫 Tidak ada damage kalau sekubu
-                if (sameTeam) break;
-
-                // 🚫 Tidak ada damage kalau bukan giliran tim ini
-                if (!myTurn) break;
-
-                OnHit?.Invoke(contact.point);
-
-                // 💥 Hanya hamster tim aktif yang bisa menyerang musuh
-                float damage = isActiveHamster ? hamsterDamage : allyDamage;
-                other.TakeDamage(damage);
-
-                Debug.Log($"💥 [TURN {currentTurn}] {name} (P{playerID}) menyerang {other.name} (P{other.playerID}) (-{damage} HP)");
-
-                // Dorongan fisik alami agar pantulan terasa realistis
-                Rigidbody2D otherRb = col.collider.attachedRigidbody;
-                if (otherRb != null)
+                if (!sameTeam && myTurn) // damage hanya kalau bukan sekutu dan sedang giliran
                 {
-                    Vector2 push = -normal * (newSpeed * 0.25f);
-                    otherRb.AddForce(push, ForceMode2D.Impulse);
+                    OnHit?.Invoke(contact.point);
+                    float damage = isActiveHamster ? hamsterDamage : allyDamage;
+                    other.TakeDamage(damage);
+                    audiomanager.Instance.PlaySFX(audiomanager.Instance.CollideHamster);
                 }
-                audiomanager.Instance.PlaySFX(audiomanager.Instance.CollideHamster);
+
                 break;
+            }
 
             case "Obstacle":
                 newSpeed *= obstacleCollideReduction;
@@ -265,7 +262,6 @@ public class HamsterController : MonoBehaviour
         {
             rb.velocity = Vector2.zero;
             rb.angularVelocity = 0f;
-            rb.Sleep();
         }
 
         Debug.DrawRay(contact.point, rb.velocity.normalized * 1.5f, Color.cyan, 0.3f);
@@ -323,13 +319,11 @@ public class HamsterController : MonoBehaviour
         if (isDead) return;
 
         hamsterHP -= amount;
-        Debug.Log($"{name} (P{playerID}) took {amount} dmg => HP={hamsterHP}");
 
         if (hamsterHP <= 0f)
         {
             hamsterHP = 0f;
             isDead = true;
-            Debug.Log($"💀 Player {playerID} hamster mati!");
             HamsterTurnManager.Instance?.OnHamsterDeath(this);
             audiomanager.Instance.PlaySFX(audiomanager.Instance.HamsterTewas);
         }
