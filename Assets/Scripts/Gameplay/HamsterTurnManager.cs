@@ -39,6 +39,7 @@ public class HamsterTurnManager : MonoBehaviour
     private void Awake()
     {
         Instance = this;
+        audiomanager.Instance.PlayCustomMusic(audiomanager.Instance.BGMMusic);
     }
     private IEnumerator StartGameSequence()
     {
@@ -202,6 +203,8 @@ public class HamsterTurnManager : MonoBehaviour
 
         int winner = (player1Score > player2Score) ? 1 : 2;
         GameUIManager.Instance?.ShowWinScreen(winner);
+        audiomanager.Instance.StopMusic();
+        audiomanager.Instance.PlaySFX(audiomanager.Instance.VictoryMusic);
 
         // Delay sedikit sebelum pause
         StartCoroutine(PauseAfterDelay());

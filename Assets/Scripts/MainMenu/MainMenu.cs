@@ -25,6 +25,7 @@ public class MainMenu : MonoBehaviour
         // Set initial state
         menuCanvasGroup.alpha = 0;
         fadePanel.color = new Color(0, 0, 0, 1);
+        audiomanager.Instance.PlayCustomMusic(audiomanager.Instance.BGMMusic);
         
         // Fade in menu
         FadeInMenu();

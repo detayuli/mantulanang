@@ -163,5 +163,6 @@ public class GameUIManager : MonoBehaviour
         Time.timeScale = 1f; 
         Scene currentScene = SceneManager.GetActiveScene();
         SceneManager.LoadScene(currentScene.name);
+        audiomanager.Instance.PlayCustomMusic(audiomanager.Instance.BGMMusic);
     }
 }

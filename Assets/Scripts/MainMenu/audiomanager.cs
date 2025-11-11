@@ -24,6 +24,7 @@ public class audiomanager : MonoBehaviour
     private Dictionary<string, AudioClip> sceneMusicDict = new Dictionary<string, AudioClip>();
     private bool isWalking = false;
     private bool sfxEnabled = true;
+    private bool musicEnabled = true;
 
     [System.Serializable]
     public class SceneMusicMapping
@@ -46,97 +47,132 @@ public class audiomanager : MonoBehaviour
             return;
         }
 
-    foreach (var mapping in sceneMusicMappings)
-    {
-        foreach (var sceneName in mapping.sceneNames)
+        // Simpan scene-music mapping ke dictionary
+        foreach (var mapping in sceneMusicMappings)
         {
-            sceneMusicDict[sceneName] = mapping.musicClip;
+            foreach (var sceneName in mapping.sceneNames)
+            {
+                sceneMusicDict[sceneName] = mapping.musicClip;
+            }
         }
-    }
 
-
-        // Subscribe to scene change events
+        // Subscribe ke event scene change
         SceneManager.activeSceneChanged += OnSceneChanged;
 
-        // Play music for the initial scene
+        // Mainkan musik untuk scene awal
         PlayMusicInCurrentScene();
     }
-    public void SetSFXEnabled(bool enabled)
+
+    private void OnDestroy()
     {
-        sfxEnabled = enabled;
+        SceneManager.activeSceneChanged -= OnSceneChanged;
     }
+
+    // ===============================
+    // ======== MUSIC CONTROL ========
+    // ===============================
 
     private void OnSceneChanged(Scene previousScene, Scene newScene)
     {
-        PlayMusicInCurrentScene(); // Check and play music for the new scene
+        PlayMusicInCurrentScene();
     }
 
-    private void PlayMusicInCurrentScene()
+    public void PlayMusicInCurrentScene()
     {
+        if (!musicEnabled || musicSource == null) return;
+
         string currentScene = SceneManager.GetActiveScene().name;
 
         if (sceneMusicDict.TryGetValue(currentScene, out AudioClip targetClip))
         {
-            // Cek apakah musik sekarang sudah sama dan sedang dimainkan
-            if (musicSource != null && musicSource.clip == targetClip && musicSource.isPlaying)
-            {
-                // Musik sama dan sudah jalan, gak usah ganti
-                return;
-            }
+            if (musicSource.clip == targetClip && musicSource.isPlaying)
+                return; // Musik sama, biarkan
 
-            // Ganti lagu dan mainkan
-            if (musicSource != null && targetClip != null)
-            {
-                musicSource.clip = targetClip;
-                musicSource.loop = true;
-                musicSource.Play();
-            }
+            musicSource.clip = targetClip;
+            musicSource.loop = true;
+            musicSource.Play();
         }
         else
         {
-            // Tidak ada musik untuk scene ini, stop musik
-            if (musicSource != null)
-            {
-                musicSource.Stop();
-            }
+            musicSource.Stop(); // Tidak ada musik untuk scene ini
         }
     }
 
+    public void PlayCustomMusic(AudioClip clip)
+    {
+        if (!musicEnabled || clip == null || musicSource == null) return;
+
+        musicSource.clip = clip;
+        musicSource.loop = true;
+        musicSource.Play();
+    }
+
+    public void StopMusic()
+    {
+        if (musicSource != null)
+            musicSource.Stop();
+    }
+
+    public void SetMusicEnabled(bool enabled)
+    {
+        musicEnabled = enabled;
+
+        if (musicSource != null)
+            musicSource.mute = !enabled;
+
+        // Jika dimatikan, stop langsung
+        if (!enabled)
+            musicSource.Stop();
+        else
+            PlayMusicInCurrentScene();
+    }
+
+    public bool IsMusicPlaying()
+    {
+        return musicSource != null && musicSource.isPlaying;
+    }
+
+    // ===============================
+    // ========= SFX CONTROL ==========
+    // ===============================
+
+    public void SetSFXEnabled(bool enabled)
+    {
+        sfxEnabled = enabled;
+        if (SFXSource != null)
+            SFXSource.mute = !enabled;
+    }
 
     public void PlaySFX(AudioClip clip)
     {
         if (SFXSource != null && clip != null && sfxEnabled)
-        {
             SFXSource.PlayOneShot(clip);
-        }
     }
+
+    // ===============================
+    // ======== EXTRA HANDLER =========
+    // ===============================
 
     public void HandleWalking(bool walking)
     {
+        if (SFXSource == null) return;
+
         if (walking && !isWalking)
         {
-            if (SFXSource != null)
-            {
-                SFXSource.clip = BGMMusic;
-                SFXSource.loop = true; // Setel loop agar langkah terus diputar
-                SFXSource.Play();
-                isWalking = true;
-            }
+            SFXSource.clip = BGMMusic;
+            SFXSource.loop = true;
+            SFXSource.Play();
+            isWalking = true;
         }
         else if (!walking && isWalking)
         {
-            SFXSource.Stop(); // Hentikan sound ketika berhenti berjalan
+            SFXSource.Stop();
             isWalking = false;
         }
     }
 
     public void HandleButtonPress()
     {
-        PlaySFX(HamsterTewas); // Pastikan variabel buttonpressClip ada
-    }
-
-    private void OnDestroy()
-    {
-        SceneManager.activeSceneChanged -= OnSceneChanged;
+        PlaySFX(HamsterTewas);
     }
 }
